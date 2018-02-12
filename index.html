@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>	Circles</title>
+	<script type="text/javascript" src="dist/paper-full.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/circles.css">
+
+
+	<!-- Howler is the library that I am using to play the sounds -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.9/howler.core.min.js"></script>
+	<script type="text/javascript" src="js/data.js"></script>
+	<script type="text/paperscript" canvas="myCanvas">
+		var circles =[];
+
+		//When you hit anykey we add a circle at a random point
+		function onKeyDown(event) {
+			if(keyData[event.key]){
+
+				var maxPoint = new Point(view.size.width, view.size.height);
+				var randomPoint = Point.random();
+				var point = maxPoint * randomPoint;
+				var newCircle = Path.Circle(point,500);
+				newCircle.fillColor = keyData[event.key].color;
+				keyData[event.key].sound.play();
+				circles.push(newCircle);
+			}
+			
+		}
+		
+		//Then we use the animation frame to loop trough all circles and for each we add one to hue
+		function onFrame(event){
+			for(var i=0; i< circles.length;i++){
+					circles[i].scale(0.9);
+					circles[i].fillColor.hue +=1;
+					if(circles[i].area < 1){
+						circles[i].remove();// remove the circle from the canvas
+						circles.splice(i,1);// remove the circle from the array
+						i--;
+						console.log(circles);
+					}
+			}
+			
+		}
+
+
+	</script>
+</head>
+<body>
+	<canvas id="myCanvas"> </canvas>
+</body>
+</html>
